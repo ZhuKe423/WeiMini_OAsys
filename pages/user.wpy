@@ -1,0 +1,98 @@
+<style>
+  .input-wrap {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    margin: 0 -12px;
+    padding: 0 12px;
+    height: 46px;
+    line-height: 46px;
+  }
+  .label {
+    color: #999;
+    width: 4.5em;
+  }
+  .account-info-input {
+    font-size: 18px;
+    line-height: 100%;
+    height: 100%;
+    width: 100%;
+  }
+
+  .flex-wrap{
+    display: flex;
+    flex-direction: row;
+  }
+
+  .container {
+    height: 90%;
+  }
+  .tappable:hover {
+    opacity: .6;
+  }
+
+  .container {
+    padding: 0px 12px;
+  }
+  .form-wrap {
+    /*border-top: 1px solid #f2f2f2;*/
+    margin: 12px 0;
+  }
+
+  .hint,
+  .error {
+    display: block;
+    margin: 8px 0;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+  }
+  .error {
+    color: #e64240;
+  }
+
+</style>
+<template>
+  <view class="container">
+    <view class="form-wrap">
+      <text class="hint">请绑定COMPANY ID</text>
+      <view class="flex-wrap input-wrap">
+        <text class="label">用户名</text>
+        <input value="{{user.username}}" bindinput="updateEmpid" id="username" class="account-info-input"/>
+      </view>
+      <view class="flex-wrap input-wrap">
+        <text class="label">密码</text>
+        <input password bindinput="updatePassword" id="password" class="account-info-input"/>
+      </view>
+      <view class="btn-area" id="buttonContainer">
+        <button class="submit" type="primary" bindtap="save">绑定</button>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import Header from '../components/header'
+  import Footer from '../components/footer'
+  export default class User extends wepy.page {
+    config = {
+      navigationBarTitleText: '用户中心'
+    }
+    components = {
+      header: Header,
+      footer: Footer
+    }
+    data = {
+      user: {
+        username: '兴隆湖'
+      },
+      employee: '',
+      username: '',
+      password: ''
+    }
+    onLoad() {
+
+    }
+  }
+</script>

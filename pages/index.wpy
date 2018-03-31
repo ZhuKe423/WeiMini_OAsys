@@ -1,0 +1,165 @@
+<style>
+@import '../styles/index.wxss'
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  margin: 20rpx;
+  border-radius: 50%;
+}
+
+.userinfo-nickname {
+  color: #aaa;
+  text-align: center
+}
+</style>
+<template>
+  <header :title="title" :desc="desc"></header>
+  <view class="container">
+
+    <!--<template is="head" data="{{title: 'main'}}"/>-->
+
+    <view class="userinfo">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <text class="userinfo-nickname">{{UI[uindex].greeting}}\n{{userInfo.nickName}}</text>
+    </view>
+
+    <view class="index">
+      <view class="index-bd">
+        <view class="kind-list">
+          <block wx:for-items="{{list}}" wx:key="{{item.id}}">
+            <view class="kind-list-item">
+              <view id="{{item.id}}" class="kind-list-item-hd {{item.open ? 'kind-list-item-hd-show' : ''}}" bindtap="kindToggle">
+                <view class="kind-list-text">{{item.name[uindex] }}</view>
+                <image class="kind-list-img" src="../image/{{item.id}}.png"></image>
+              </view>
+              <view class="kind-list-item-bd {{item.open ? 'kind-list-item-bd-show' : ''}}">
+                <view class="navigator-box {{item.open ? 'navigator-box-show' : ''}}">
+                  <!--<block wx:for-items="{{item.pages}}" wx:for-item="page" wx:key="*item">
+                    <navigator url="pages/{{page}}/{{page}}" class="navigator">
+                      <view class="navigator-text">{{page}}</view>
+                      <view class="navigator-arrow"></view>
+                    </navigator>
+                  </block>-->
+                  <block wx:for-items="{{item.pages}}" wx:for-item="page" wx:key="*item">
+                    <navigator url="./{{page.path}}" class="navigator">
+                      <view class="navigator-text">{{page.title[uindex]}}</view>
+                      <view class="navigator-arrow"></view>
+                    </navigator>
+                  </block>
+                </view>
+              </view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+
+
+    <view class="usermotto">
+      <!--<text class="user-motto">{{motto}}</text>-->
+    </view>
+  </view>
+  <footer></footer>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Header from '../components/header'
+  import Footer from '../components/footer'
+
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: 'test'
+    }
+
+    components = {
+      header: Header,
+      footer: Footer
+    }
+
+    data = {
+      title: '首页',
+      desc: 'adafsdfasf',
+      userInfo: {},
+      uindex: null,
+      UI: [
+        {greeting: '欢迎回来!'}, // Chinese UI
+        {greeting: 'Welcome back!'},  // English UI
+        {greeting: 'お帰りなさい!'}
+      ],
+      list: [
+        {
+          id: 'timecard',
+          name: ['打卡', 'Time Card', '打刻'],
+          open: false,
+          pages: [
+            {path: 'timecard', title: ['正常出勤', 'Normal Checkin', '通常出勤']},
+            {path: 'attendance', title: ['打卡记录', 'Check History', '打刻履歴']}
+          ]
+        }, {
+          id: 'overwork',
+          name: ['各类申请', 'Application', '各種申請'],
+          open: false,
+          pages: [
+            {path: 'create', title: ['加班申请', 'Apply Overwork', '残業申請']},
+            {path: 'list', title: ['休假申请', 'Apply vacation', '休暇申請']}
+          ]
+        }, {
+          id: 'approval',
+          name: ['申请审批', 'Improvement', '申請承認'],
+          open: false,
+          pages: [
+            {path: 'approvals', title: ['子菜单', 'Sub-menu', 'サブメニュー']}
+          ]
+        }
+      ]
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+      kindToggle(e) {
+        var id = e.currentTarget.id
+        var list = this.data.list
+        for (var i = 0, len = list.length; i < len; ++i) {
+          if (list[i].id === id) {
+            list[i].open = !list[i].open
+          } else {
+            list[i].open = false
+          }
+        }
+        this.list = list
+        this.$apply()
+      }
+    }
+
+    events = {
+      'index-emit': (...args) => {
+        let $event = args[args.length - 1]
+        console.log(`${this.$name} receive ${$event.name} from ${$event.source.$name}`)
+      }
+    }
+
+    onLoad() {
+      let self = this
+      this.$parent.getUserInfo(function (userInfo) {
+        if (userInfo) {
+          self.userInfo = userInfo
+        }
+        self.uindex = 0
+        self.$apply()
+      })
+    }
+  }
+</script>

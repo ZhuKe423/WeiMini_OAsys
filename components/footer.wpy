@@ -1,0 +1,14 @@
+<style>
+</style>
+
+<template name="foot">
+  <navigator class="page-foot" openType="switchTab" url="/page/component/index" hover-class="none">
+    <image class="icon-foot" src="../image/icon_foot.png"></image>
+  </navigator>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Footer extends wepy.component {
+  }
+</script>

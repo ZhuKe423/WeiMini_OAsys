@@ -1,0 +1,156 @@
+<style>
+  @import "../styles/lib/weui.wxss";
+  .picker{
+    padding: 19rpx 26rpx;
+    background-color: #FFFFFF;
+  }
+
+  .display-container {
+    align-items: center;
+    justify-content: center;
+    /*border: 1px solid grey;*/
+    margin: 10px;
+    text-align: center;
+  }
+
+  .clock {
+    font-size: 3.4em;
+    font-weight: 500;
+    /*color: #006df0;*/
+    align-self: center;
+  }
+
+</style>
+<template>
+  <header></header>
+  <view class="container">
+    <template is="head" data="{{title: title}}"/>
+
+    <view class="display-container">
+      <text class="clock">{{displayTime}}</text>
+    </view>
+
+    <view class="page-body">
+      <form catchsubmit="formSubmit" catchreset="formReset">
+        <view class="page-section">
+          <view class="weui-cells__title">{{UI[uindex].checkType}}</view>
+          <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_input">
+              <view class="weui-cell__hd">
+                <view class="weui-label">{{UI[uindex].current}}</view>
+              </view>
+              <view class="weui-cell__bd">
+
+                <picker name="type" bindchange="bindPickerChange" value="{{checkType[uindex][index].id}}" range="{{checkType[uindex]}}" range-key="msg">
+                  <view class="weui-input">{{checkType[uindex][index].msg}}</view>
+                </picker>
+
+              </view>
+            </view>
+          </view>
+
+
+          <view class="page-section">
+
+            <view class="weui-cell weui-cell_input">
+              <view class="weui-cell__hd">
+                <view class="weui-label">{{UI[uindex].locName}}</view>
+              </view>
+              <view class="weui-cell__bd">
+                <input class="weui-input" type="text" disabled="{{true}}" name="locName" value="{{UI[uindex].locNameContent}}" name="name"></input>
+              </view>
+            </view>
+            <view class="weui-cell weui-cell_input">
+              <view class="weui-cell__hd">
+                <view class="weui-label">{{UI[uindex].locDesc}}</view>
+              </view>
+              <view class="weui-cell__bd">
+                <input class="weui-input" type="text" disabled="{{true}}" name="locDesc" value="{{UI[uindex].locDescContent}}" name="address"></input>
+              </view>
+            </view>
+
+            <view class="btn-area" id="buttonContainer">
+              <button type="info" bindtap="relocate" loading="{{loading}}">{{UI[uindex].locButton}}</button>
+            </view>
+          </view>
+
+        </view>
+
+        <view class="btn-area" id="buttonContainer">
+          <button formType="submit" type="primary">{{UI[uindex].submitButton}}</button>
+        </view>
+      </form>
+    </view>
+  </view>
+  <footer></footer>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Header from '../components/header'
+  import Footer from '../components/footer'
+  var amapFile = require('../utils/amap-wx.js')
+  export default class TimeCard extends wepy.page {
+    config = {
+      navigationBarTitleText: '考勤表'
+    }
+
+    components = {
+      header: Header,
+      footer: Footer
+    }
+
+    data = {
+      latitude: 0,
+      longitude: 0,
+      displayTime: null,
+      uindex: null,
+      index: 0,
+      title: null,
+      checkType: [
+        [{id: 'clockIn', msg: '上班'}, {id: 'clockOut', msg: '下班'}],
+        [{id: 'clockIn', msg: 'Clock In'}, {id: 'clockOut', msg: 'Clock Out'}],
+        [{id: 'clockIn', msg: '出勤'}, {id: 'clockOut', msg: '退勤'}]
+      ],
+      loading: false, // 更新地理位置加载状态
+      checkMode: {},
+      UI: [
+        {checkType: '打卡目的', current: '当前选择', locName: '位置名称', locDesc: '详细位置', locNameContent: '等待获取', locDescContent: '等待获取', locButton: '更新定位', submitButton: '提交'},
+        {checkType: 'Type', current: 'Current', locName: 'Location', locDesc: 'Detail', locNameContent: 'Waiting', locDescContent: 'Waiting', locButton: 'Update Location', submitButton: 'Submit'},
+        {checkType: '打刻種類', current: '選択項目', locName: '現在場所', locDesc: '詳細位置', locNameContent: '取得待ち', locDescContent: '取得待ち', locButton: '場所再取得', submitButton: '打刻'}
+      ]
+    }
+
+    onLoad() {
+      this.loading = true
+      this.$apply()
+
+      var selectedLanguage = 0
+      var toastTitle = ['定位成功', 'Got Location', '取得完了'][selectedLanguage]
+      var that = this
+      var ui = this.UI
+      var amap = new amapFile.AMapWX({key: 'd0599a5c8dfba96ea986aa34de371f67'})
+      amap.getRegeo({
+        success: function(data) {
+          // 成功回调
+          wepy.showToast({
+            title: toastTitle,
+            icon: 'success',
+            duration: 1000
+          })
+          // 改写UI，反映在视图层
+          console.log(data[0])
+          ui[selectedLanguage].locNameContent = data[0].name
+          ui[selectedLanguage].locDescContent = data[0].desc
+          var lat = data[0].latitude
+          var lon = data[0].longitude
+          that.UI = ui
+          that.latitude = lat
+          that.longitude = lon
+          that.loading = false
+          this.$apply()
+        }
+      })
+    }
+  }
+</script>

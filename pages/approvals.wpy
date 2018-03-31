@@ -1,0 +1,167 @@
+<style>
+  @import "../styles/lib/weui.wxss";
+  .weui-panel {
+    background-color: #FFFFFF;
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+  .weui-panel:first-child {
+    margin-top: 0;
+  }
+  .weui-panel:before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    height: 1px;
+    border-top: 1rpx solid #E5E5E5;
+    color: #E5E5E5;
+  }
+  .weui-panel:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 1px;
+    border-bottom: 1rpx solid #E5E5E5;
+    color: #E5E5E5;
+  }
+  .weui-panel__hd {
+    padding: 14px 15px 10px;
+    color: #999999;
+    font-size: 13px;
+    position: relative;
+  }
+  .weui-panel__hd:after {
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 1px;
+    border-bottom: 1rpx solid #E5E5E5;
+    color: #E5E5E5;
+    left: 15px;
+  }
+</style>
+<template>
+  <view class="page">
+    <!--<view class="page__hd">
+        <view class="page__title">Panel</view>
+        <view class="page__desc">面板</view>
+    </view>-->
+    <view class="page__bd">
+      <view class="weui-panel weui-panel_access">
+        <view class="weui-panel__hd">图文组合列表</view>
+        <view class="weui-panel__bd">
+          <navigator url="../../info/payment/payment" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+              <image class="weui-media-box__thumb" src="../../../image/salary.png" />
+            </view>
+            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+              <view class="weui-media-box__title">月薪</view>
+              <view class="weui-media-box__desc">2017/4</view>
+            </view>
+          </navigator>
+
+          <navigator url="../../info/payment/payment" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+              <image class="weui-media-box__thumb" src="../../../image/salary.png" />
+            </view>
+            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+              <view class="weui-media-box__title">月薪</view>
+              <view class="weui-media-box__desc">2017/14</view>
+            </view>
+          </navigator>
+
+          <navigator url="../../info/payment/payment" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+              <image class="weui-media-box__thumb" src="../../../image/salary.png" />
+            </view>
+            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+              <view class="weui-media-box__title">月薪</view>
+              <view class="weui-media-box__desc">2017/4</view>
+            </view>
+          </navigator>
+
+          <navigator url="../../info/payment/payment" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+              <image class="weui-media-box__thumb" src="../../../image/salary.png" />
+            </view>
+            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+              <view class="weui-media-box__title">月薪</view>
+              <view class="weui-media-box__desc">2017/4</view>
+            </view>
+          </navigator>
+
+          <navigator url="../../info/payment/payment" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+              <image class="weui-media-box__thumb" src="../../../image/bonus.png" />
+            </view>
+            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+              <view class="weui-media-box__title">季度奖金</view>
+              <view class="weui-media-box__desc">2017/6</view>
+            </view>
+          </navigator>
+
+          <navigator url="../../info/payment/payment" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active">
+            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+              <image class="weui-media-box__thumb" src="../../../image/salary.png" />
+            </view>
+            <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+              <view class="weui-media-box__title">月薪</view>
+              <view class="weui-media-box__desc">2017/4</view>
+            </view>
+          </navigator>
+        </view>
+        <view class="weui-panel__ft">
+          <view class="weui-cell weui-cell_access weui-cell_link">
+            <view class="weui-cell__bd">查看更多</view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class User extends wepy.page {
+    config = {
+      navigationBarTitleText: '用户中心'
+    }
+    components = {
+    }
+    data = {
+      topics: null
+    }
+    onLoad(options) {
+      wepy.showNavigationBarLoading()
+      var that = this
+      wepy.request({
+        url: 'https://www.v2ex.com/api/topics/hot.json',
+        data: {},
+        method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+        // header: {}, // 设置请求的 header
+        success: function (res) {
+          // success
+          console.log(res.data)
+          wepy.hideNavigationBarLoading()
+
+          that.setData({
+            topics: res.data
+          })
+        },
+        fail: function (res) {
+          // fail
+        },
+        complete: function (res) {
+          // complete
+        }
+      })
+    }
+  }
+</script>

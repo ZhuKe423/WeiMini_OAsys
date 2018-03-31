@@ -1,0 +1,103 @@
+<style>
+  @import "../styles/lib/weui.wxss";
+  .picker{
+    padding: 19rpx 26rpx;
+    background-color: #FFFFFF;
+  }
+
+  .userinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .userinfo-avatar {
+    width: 128rpx;
+    height: 128rpx;
+    margin: 20rpx;
+    border-radius: 50%;
+  }
+
+  .userinfo-nickname {
+    color: #aaa;
+    text-align: center
+  }
+
+  .navigator {
+    background: white;
+    border-bottom: 1px solid #eee;
+    padding: 0 12px;
+    height: 46px;
+    line-height: 46px;
+  }
+</style>
+<template>
+  <header :title="title" :desc="desc"></header>
+  <view class="container">
+
+    <view  class="userinfo">
+      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <!--<text class="userinfo-nickname">{{UI[uindex].greeting}}\n{{userInfo.nickName}}</text>-->
+      <text class="userinfo-nickname" wx:if="{{user !== null}}">You are logged in as, {{user.username}}</text>
+      <text class="userinfo-nickname" wx:if="{{user == null}}">Please bind with your Employee ID</text>
+    </view>
+
+    <view class="page-section">
+
+      <view class="weui-cells__title">{{UI[index].accountMg}}</view>
+      <navigator wx:if="{{user == null}}" url="../user/user" class="navigator user">{{UI[index].bind}}</navigator>
+      <navigator wx:if="{{user !== null}}" bindtap="unbind" class="navigator user">{{UI[index].unbind}}</navigator>
+
+      <view class="weui-cells__title">{{UI[index].language}}</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">{{UI[index].currentLan}}</view>
+          </view>
+          <view class="weui-cell__bd">
+            <picker bindchange="bindPickerChange" value="{{index}}" range="{{languages}}">
+              <view class="weui-input">{{languages[index]}}</view>
+            </picker>
+          </view>
+        </view>
+      </view>
+      <!--</view>-->
+
+      <view class="btn-area" id="buttonContainer">
+        <button bindtap="save" type="primary">{{UI[index].save}}</button>
+      </view>
+    </view>
+    <!--<template is="foot" />-->
+  </view>
+  <footer></footer>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Header from '../components/header'
+  import Footer from '../components/footer'
+  export default class Settings extends wepy.page {
+    components = {
+      header: Header,
+      footer: Footer
+    }
+    config = {
+      navigationBarTitleText: '设置'
+    }
+    data = {
+      title: '用户设置',
+      desc: 'adafsdfasf',
+      user: null,
+      userInfo: {},
+      employeeId: '',
+      inputStatus: false,
+      languages: ['简体中文', 'English', '日本語'], // '繁体中文', '日本語' may be supported in the future
+      index: 0,                                    // current default selected item
+      UI: [
+        {title: '设置', language: '选择语言', currentLan: '当前选择', employeeIdTitle: '雇员编号', currentId: '如有疑问请联系人事部门', employeeId: 'EMP10086RD', save: '保存', accountMg: '账户管理', bind: '绑定COMPANY账户', unbind: '解除绑定', unbindMsgTitle: '解除账户绑定', unbindMsgContent: '我已知晓解除与COMPANY账户的绑定后，将导致部分功能不可用。'},
+        {title: 'Settings', language: 'Change Language', currentLan: 'Current', employeeIdTitle: 'Employee ID', currentId: 'Contact HR Dept.', employeeId: 'EMP10086RD', save: 'Save Changes', accountMg: 'Account Manage', bind: 'Bind with COMPANY ID', unbind: 'Unbind COMPANY ID', unbindMsgTitle: 'Unbind Account', unbindMsgContent: 'I am aware unbinding COMPANY ID will cause some features to be unavailable.'},
+        {title: '設定', language: '言語変更', currentLan: '選択項目', employeeIdTitle: '社員番号', currentId: '人事部に連絡してください.', employeeId: 'EMP10086RD', save: '保存', accountMg: '账户管理', bind: '绑定COMPANY账户', unbind: '解除绑定', unbindMsgTitle: '解除账户绑定', unbindMsgContent: '我已知晓解除与COMPANY账户的绑定后，将导致部分功能不可用。'}
+      ]
+    }
+  }
+</script>
